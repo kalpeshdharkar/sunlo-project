@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "sunlo-stg",
+    "staging": "sunlo-stg"
+  },
+  "targets": {
+    "sunlo-stg": {
+      "hosting": {
+        "staging": [
+          "sunlo-stg"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

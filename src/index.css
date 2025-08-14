@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles (optional) */
+body {
+  @apply bg-black text-white font-sans;
+}
+
+h1 {
+  @apply text-4xl font-bold mb-4;
+}
+
+p {
+  @apply text-lg;
+}
