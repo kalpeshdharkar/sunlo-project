@@ -30,7 +30,7 @@ const PlayerBar = () => {
       aria-label="Mini player controls"
     >
       <div className="flex flex-col md:flex-row items-center justify-between px-4 py-3 gap-3 md:gap-0 w-full">
-        {/* Song info */}
+        {/* Song info near controls */}
         <div className="flex items-center gap-3 w-full md:w-1/2 overflow-hidden">
           {currentVideo && (
             <img
@@ -49,6 +49,7 @@ const PlayerBar = () => {
             </p>
           </div>
         </div>
+
         {/* Controls */}
         <div className="flex items-center gap-4">
           <button

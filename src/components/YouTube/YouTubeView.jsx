@@ -41,6 +41,7 @@ const YouTubeView = () => {
               src={thumbnail}
               alt={title}
               className="w-full aspect-video object-cover"
+              loading="lazy"
             />
             <div className="p-2">
               <p className="text-sm font-semibold truncate">{title}</p>

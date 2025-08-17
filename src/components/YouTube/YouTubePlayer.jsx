@@ -9,20 +9,20 @@ const YouTubePlayer = () => {
   const [videoMode, setVideoMode] = useState(false); // toggle audio/video mode
 
   const opts = {
-    height: videoMode ? '240' : '1', // 1px instead of 0 to prevent iframe API issue
+    height: videoMode ? '240' : '1',
     width: videoMode ? '426' : '1',
     playerVars: {
       autoplay: 1,
       modestbranding: 1,
       controls: videoMode ? 1 : 0,
       playsinline: 1,
-      mute: 1,
+      mute: 0, // Start unmuted for autoplay
     },
   };
 
   const onReady = (event) => {
     playerRef.current = event.target;
-    playerRef.current.mute();  // mute for autoplay policy
+    playerRef.current.unMute(); // Auto unmute on play
     playerRef.current.playVideo();
     setIsPlaying(true);
   };
@@ -33,6 +33,7 @@ const YouTubePlayer = () => {
       playerRef.current.pauseVideo();
       setIsPlaying(false);
     } else {
+      playerRef.current.unMute(); // Ensure unmute on play toggle
       playerRef.current.playVideo();
       setIsPlaying(true);
     }
@@ -63,12 +64,12 @@ const YouTubePlayer = () => {
           {videoMode ? 'Audio Mode' : 'Video Mode'}
         </button>
       </div>
-      
+
       {/* YouTube iframe */}
       <div className={`overflow-hidden transition-all duration-300 ${videoMode ? 'h-[240px] w-full' : 'h-1 w-1'}`}>
         <YouTube videoId={currentVideoId} opts={opts} onReady={onReady} />
       </div>
-      
+
       {/* Mini Player Controls */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center gap-3">
@@ -82,7 +83,7 @@ const YouTubePlayer = () => {
             <SkipForward className="w-5 h-5" />
           </button>
         </div>
-        <p className="text-sm text-gray-300 truncate w-1/2">Playing ID: {currentVideoId}</p>
+        {/* Removed Playing ID display for clearer UI */}
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import SearchBar from './SearchBar';
 import PlaylistRow from './PlaylistRow';
-import PlayerBar from './PlayerBar';
-import YouTubePlayer from '../YouTube/YouTubePlayer';
 import { useYouTube } from 'context/YouTubeContext';
 import YouTubeView from '../YouTube/YouTubeView';
+import UnifiedPlayerBar from './UnifiedPlayerBar'; // Import the new unified player bar
 
 const MainPage = () => {
   const { videos, trending } = useYouTube();
@@ -38,9 +37,8 @@ const MainPage = () => {
         <YouTubeView />
       </div>
 
-      {/* Bottom Controls */}
-      <PlayerBar />
-      <YouTubePlayer />
+      {/* Unified Player Bar */}
+      <UnifiedPlayerBar />
     </div>
   );
 };
