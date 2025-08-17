@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
-// Context banaya
-const YouTubeContext = createContext();
+// Export the raw context too (so imports like { YouTubeContext } work)
+export const YouTubeContext = createContext();
 
 // Hook export
 export const useYouTube = () => useContext(YouTubeContext);
@@ -17,7 +17,6 @@ export const YouTubeProvider = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 🔍 Search videos from YouTube API
   const searchVideos = async (query) => {
     if (!query) return;
     try {
@@ -28,11 +27,10 @@ export const YouTubeProvider = ({ children }) => {
           q: query,
           key: API_KEY,
           type: 'video',
-          videoCategoryId: 10, // Music
+          videoCategoryId: 10,
         },
       });
       setVideos(res.data.items);
-      // search result ko queue bana do
       setQueue(res.data.items.map((v) => v.id.videoId));
       setCurrentIndex(0);
     } catch (error) {
@@ -40,7 +38,6 @@ export const YouTubeProvider = ({ children }) => {
     }
   };
 
-  // 🔥 Get trending music videos
   const trending = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/videos`, {
@@ -49,29 +46,25 @@ export const YouTubeProvider = ({ children }) => {
           chart: 'mostPopular',
           maxResults: 20,
           regionCode: 'IN',
-          videoCategoryId: 10, // Music
+          videoCategoryId: 10,
           key: API_KEY,
         },
       });
       setVideos(res.data.items);
-      setQueue(res.data.items.map((v) => v.id)); // trending API me id object nahi hota
+      setQueue(res.data.items.map((v) => v.id));
       setCurrentIndex(0);
     } catch (error) {
       console.error('Trending fetch error:', error);
     }
   };
 
-  // ▶ Play a specific video and update queue index
   const playVideoById = (videoId) => {
     const index = queue.indexOf(videoId);
-    if (index !== -1) {
-      setCurrentIndex(index);
-    }
+    if (index !== -1) setCurrentIndex(index);
     setCurrentVideoId(videoId);
     setIsPlaying(true);
   };
 
-  // ⏭ Next in queue
   const nextVideo = () => {
     if (queue.length === 0) return;
     const nextIndex = (currentIndex + 1) % queue.length;
@@ -80,7 +73,6 @@ export const YouTubeProvider = ({ children }) => {
     setIsPlaying(true);
   };
 
-  // ⏮ Previous in queue
   const prevVideo = () => {
     if (queue.length === 0) return;
     const prevIndex = (currentIndex - 1 + queue.length) % queue.length;
@@ -89,7 +81,6 @@ export const YouTubeProvider = ({ children }) => {
     setIsPlaying(true);
   };
 
-  // Context value
   const value = {
     videos,
     currentVideoId,
@@ -102,9 +93,5 @@ export const YouTubeProvider = ({ children }) => {
     prevVideo,
   };
 
-  return (
-    <YouTubeContext.Provider value={value}>
-      {children}
-    </YouTubeContext.Provider>
-  );
+  return <YouTubeContext.Provider value={value}>{children}</YouTubeContext.Provider>;
 };

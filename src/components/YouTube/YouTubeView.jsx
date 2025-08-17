@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
-import { useYouTube } from '../context/YouTubeContext';
+import { useYouTube } from 'context/YouTubeContext';
 import { motion } from 'framer-motion';
 
 const YouTubeView = () => {
-  const { videos, searchVideos, trending, setCurrentVideoId } = useYouTube();
+  const { videos, trending, setCurrentVideoId } = useYouTube();
 
-  // Load trending videos initially if no search results
   useEffect(() => {
-    if (!videos.length) {
+    if (videos.length === 0) {
       trending();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [videos.length]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-2">
@@ -29,6 +28,14 @@ const YouTubeView = () => {
             transition={{ delay: idx * 0.05 }}
             className="bg-gray-800 rounded-lg overflow-hidden shadow-md cursor-pointer hover:scale-105 transition-transform"
             onClick={() => setCurrentVideoId(videoId)}
+            aria-label={`Play video: ${title}`}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setCurrentVideoId(videoId);
+              }
+            }}
           >
             <img
               src={thumbnail}

@@ -7,14 +7,13 @@ const YouTubePlayer = () => {
   const { currentVideoId, nextVideo, prevVideo, isPlaying, setIsPlaying } = useYouTube();
   const playerRef = useRef(null);
 
-  if (!currentVideoId) return null;
-
+  // Hidden iframe opts (muted autoplay allowed)
   const opts = {
     height: '0',
     width: '0',
     playerVars: {
-      autoplay: 1,       // Try to start immediately
-      mute: 1,           // Muted autoplay is allowed
+      autoplay: 1,
+      mute: 1,
       controls: 0,
       modestbranding: 1,
       playsinline: 1
@@ -23,7 +22,7 @@ const YouTubePlayer = () => {
 
   const onReady = (event) => {
     playerRef.current = event.target;
-    // Start muted for autoplay
+    // Start muted to satisfy autoplay policy
     playerRef.current.mute();
     playerRef.current.playVideo();
     setIsPlaying(true);
@@ -35,21 +34,28 @@ const YouTubePlayer = () => {
       playerRef.current.pauseVideo();
       setIsPlaying(false);
     } else {
-      // Unmute + play on user click → satisfies autoplay rule
+      // Unmute + play on user action
       playerRef.current.unMute();
       playerRef.current.playVideo();
       setIsPlaying(true);
     }
   };
 
+  // Media Session handlers — keep hook at top level, guard inside
   useEffect(() => {
+    if (!currentVideoId) return;
+
     if ('mediaSession' in navigator) {
       navigator.mediaSession.setActionHandler('play', togglePlay);
       navigator.mediaSession.setActionHandler('pause', togglePlay);
       navigator.mediaSession.setActionHandler('previoustrack', prevVideo);
       navigator.mediaSession.setActionHandler('nexttrack', nextVideo);
     }
-  }, [isPlaying, nextVideo, prevVideo]);
+    // no cleanup required for setActionHandler in most cases
+  }, [currentVideoId, nextVideo, prevVideo, isPlaying]);
+
+  // Safe to conditionally render AFTER hooks
+  if (!currentVideoId) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-md border-t border-gray-800 z-50">
@@ -59,7 +65,7 @@ const YouTubePlayer = () => {
         opts={opts}
         onReady={onReady}
         iframeClassName="hidden"
-        iframeProps={{ allow: "autoplay" }}
+        iframeProps={{ allow: 'autoplay' }}
       />
 
       {/* Mini Player UI */}
@@ -76,11 +82,7 @@ const YouTubePlayer = () => {
             onClick={togglePlay}
             className="p-3 rounded-full bg-purple-500 hover:bg-purple-600"
           >
-            {isPlaying ? (
-              <Pause className="w-5 h-5" />
-            ) : (
-              <Play className="w-5 h-5" />
-            )}
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
           </button>
 
           <button

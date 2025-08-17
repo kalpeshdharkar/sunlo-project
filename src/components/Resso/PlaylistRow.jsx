@@ -1,5 +1,5 @@
 import React from 'react';
-import { useYouTube } from '../../context/YouTubeContext';
+import { useYouTube } from 'context/YouTubeContext';
 import { motion } from 'framer-motion';
 
 const PlaylistRow = ({ title, items }) => {
@@ -28,6 +28,14 @@ const PlaylistRow = ({ title, items }) => {
               transition={{ delay: idx * 0.05 }}
               className="min-w-[150px] bg-gray-800 rounded-lg overflow-hidden shadow-md cursor-pointer hover:scale-105 transition-transform"
               onClick={() => setCurrentVideoId(videoId)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play video: ${vTitle}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setCurrentVideoId(videoId);
+                }
+              }}
             >
               <img
                 src={thumb}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useYouTube } from '../../context/YouTubeContext';
+import { useYouTube } from 'context/YouTubeContext';
 import { Play, Pause, SkipForward, SkipBack } from 'lucide-react';
 
 const PlayerBar = () => {
@@ -12,29 +12,32 @@ const PlayerBar = () => {
     prevVideo
   } = useYouTube();
 
-  // Find details of the current video for artwork/title
-  const currentVideo = videos.find(v =>
-    (v.id.videoId || v.id) === currentVideoId
+  const currentVideo = videos.find(
+    v => (v.id.videoId || v.id) === currentVideoId
   );
 
   if (!currentVideoId) return null;
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
-    // YouTube actual play/pause handled inside YouTubePlayer component
+    // Actual play/pause handled in YouTubePlayer
   };
 
   return (
-    <div className="fixed bottom-[72px] left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 z-40">
-      <div className="flex items-center justify-between px-4 py-3">
-        
+    <div
+      className="fixed bottom-[72px] left-0 right-0 z-40 bg-gray-900/95 backdrop-blur-md border-t border-gray-800"
+      style={{ minHeight: 70 }}
+      aria-label="Mini player controls"
+    >
+      <div className="flex flex-col md:flex-row items-center justify-between px-4 py-3 gap-3 md:gap-0 w-full">
         {/* Song info */}
-        <div className="flex items-center gap-3 w-1/2 overflow-hidden">
+        <div className="flex items-center gap-3 w-full md:w-1/2 overflow-hidden">
           {currentVideo && (
             <img
               src={currentVideo.snippet?.thumbnails?.default?.url}
-              alt={currentVideo.snippet?.title}
-              className="w-12 h-12 rounded object-cover flex-shrink-0"
+              alt={currentVideo.snippet?.title || 'Track Artwork'}
+              className="w-14 h-14 rounded object-cover flex-shrink-0"
+              style={{ minWidth: 48, minHeight: 48 }}
             />
           )}
           <div className="overflow-hidden">
@@ -46,30 +49,31 @@ const PlayerBar = () => {
             </p>
           </div>
         </div>
-
         {/* Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
             onClick={prevVideo}
-            className="p-2 rounded-full bg-gray-800 hover:bg-gray-700"
+            className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-purple-400"
+            aria-label="Previous track"
+            style={{ minWidth: 48, minHeight: 48 }}
           >
             <SkipBack className="w-5 h-5" />
           </button>
-
           <button
             onClick={togglePlay}
-            className="p-3 rounded-full bg-purple-500 hover:bg-purple-600"
+            className="p-4 rounded-full bg-purple-500 hover:bg-purple-600 focus:outline-purple-400"
+            aria-label={isPlaying ? "Pause" : "Play"}
+            style={{ minWidth: 48, minHeight: 48 }}
           >
-            {isPlaying ? (
-              <Pause className="w-5 h-5" />
-            ) : (
-              <Play className="w-5 h-5" />
-            )}
+            {isPlaying
+              ? <Pause className="w-6 h-6" />
+              : <Play className="w-6 h-6" />}
           </button>
-
           <button
             onClick={nextVideo}
-            className="p-2 rounded-full bg-gray-800 hover:bg-gray-700"
+            className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-purple-400"
+            aria-label="Next track"
+            style={{ minWidth: 48, minHeight: 48 }}
           >
             <SkipForward className="w-5 h-5" />
           </button>

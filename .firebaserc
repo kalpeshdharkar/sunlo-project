@@ -1,13 +1,24 @@
 {
   "projects": {
     "default": "sunlo-stg",
-    "staging": "sunlo-stg"
+    "staging": "sunlo-stg",
+    "production": "sunlo-stream"
   },
   "targets": {
     "sunlo-stg": {
       "hosting": {
         "staging": [
           "sunlo-stg"
+        ]
+      }
+    },
+    "sunlo-stream": {
+      "hosting": {
+        "staging": [
+          "sunlo-stg"
+        ],
+        "production": [
+          "sunlo-stream"
         ]
       }
     }

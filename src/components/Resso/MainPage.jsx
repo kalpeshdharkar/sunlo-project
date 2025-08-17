@@ -3,18 +3,18 @@ import SearchBar from './SearchBar';
 import PlaylistRow from './PlaylistRow';
 import PlayerBar from './PlayerBar';
 import YouTubePlayer from '../YouTube/YouTubePlayer';
-import { useYouTube } from '../../context/YouTubeContext';
+import { useYouTube } from 'context/YouTubeContext';
 import YouTubeView from '../YouTube/YouTubeView';
 
 const MainPage = () => {
   const { videos, trending } = useYouTube();
 
-  // Fetch trending videos initially
   useEffect(() => {
-    if (!videos.length) {
+    if (videos.length === 0) {
       trending();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videos.length, trending]);
 
   return (
     <div className="relative min-h-screen bg-gray-950 text-white pb-40">
@@ -33,7 +33,7 @@ const MainPage = () => {
         <PlaylistRow title="Trending Now" items={videos} />
       </div>
 
-      {/* Full YouTube grid view (optional section) */}
+      {/* Full YouTube grid view */}
       <div className="px-2 mt-6">
         <YouTubeView />
       </div>
