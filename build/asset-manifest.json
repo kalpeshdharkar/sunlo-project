@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.8bff7106.css",
     "main.js": "/static/js/main.4be76ca2.js",
     "index.html": "/index.html",
@@ -9,5 +10,16 @@
   "entrypoints": [
     "static/css/main.8bff7106.css",
     "static/js/main.4be76ca2.js"
+=======
+    "main.css": "/static/css/main.fe416d92.css",
+    "main.js": "/static/js/main.26b64bed.js",
+    "index.html": "/index.html",
+    "main.fe416d92.css.map": "/static/css/main.fe416d92.css.map",
+    "main.26b64bed.js.map": "/static/js/main.26b64bed.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fe416d92.css",
+    "static/js/main.26b64bed.js"
+>>>>>>> 77c1d34 (First commit - Sunlo project v1)
   ]
 }
