@@ -1,10 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
-// Export the raw context too (so imports like { YouTubeContext } work)
 export const YouTubeContext = createContext();
 
-// Hook export
 export const useYouTube = () => useContext(YouTubeContext);
 
 export const YouTubeProvider = ({ children }) => {
@@ -16,6 +14,7 @@ export const YouTubeProvider = ({ children }) => {
   const [queue, setQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasUserSelectedVideo, setHasUserSelectedVideo] = useState(false); // New flag
 
   const searchVideos = async (query) => {
     if (!query) return;
@@ -33,6 +32,7 @@ export const YouTubeProvider = ({ children }) => {
       setVideos(res.data.items);
       setQueue(res.data.items.map((v) => v.id.videoId));
       setCurrentIndex(0);
+      // Do not auto-set currentVideoId on search, keep player hidden until user selects video
     } catch (error) {
       console.error('Search error:', error);
     }
@@ -53,6 +53,7 @@ export const YouTubeProvider = ({ children }) => {
       setVideos(res.data.items);
       setQueue(res.data.items.map((v) => v.id));
       setCurrentIndex(0);
+      // Do not auto-set currentVideoId on trending fetch
     } catch (error) {
       console.error('Trending fetch error:', error);
     }
@@ -63,6 +64,7 @@ export const YouTubeProvider = ({ children }) => {
     if (index !== -1) setCurrentIndex(index);
     setCurrentVideoId(videoId);
     setIsPlaying(true);
+    setHasUserSelectedVideo(true); // Mark as user has selected video
   };
 
   const nextVideo = () => {
@@ -71,6 +73,7 @@ export const YouTubeProvider = ({ children }) => {
     setCurrentIndex(nextIndex);
     setCurrentVideoId(queue[nextIndex]);
     setIsPlaying(true);
+    setHasUserSelectedVideo(true);
   };
 
   const prevVideo = () => {
@@ -79,6 +82,7 @@ export const YouTubeProvider = ({ children }) => {
     setCurrentIndex(prevIndex);
     setCurrentVideoId(queue[prevIndex]);
     setIsPlaying(true);
+    setHasUserSelectedVideo(true);
   };
 
   const value = {
@@ -91,6 +95,7 @@ export const YouTubeProvider = ({ children }) => {
     setCurrentVideoId: playVideoById,
     nextVideo,
     prevVideo,
+    hasUserSelectedVideo,
   };
 
   return <YouTubeContext.Provider value={value}>{children}</YouTubeContext.Provider>;
